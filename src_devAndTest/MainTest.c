@@ -10,7 +10,7 @@
  */
 
 /**
- *  @file main_test.c
+ *  @file MainTest.c
  *  @author Michal Durila
  *  @brief This module tests the functionality of event reporting.
  *
