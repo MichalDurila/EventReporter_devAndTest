@@ -21,18 +21,17 @@
 #include <stdlib.h>
 
 #include "../src/Comm.h"
-#include "../src/Modules.h"
 #include "../src/NvmMem.h"
 #include "../src/Storage.h"
 
 int main(void) {
-	uint8_t u8TestVariable;
+    uint8_t u8TestVariable = 0U;
 
-	printf("main: start\n");
-	NvmMem_Write(0x00001000, &u8TestVariable, 2U);
-	//Comm_SendEventReport(&u8TestVariable, 2U);
-	//Storage_StoreEventReport(&u8TestVariable, 2U);
-	printf("main: end\n\n");
+    printf("main: start\n");
+    NvmMem_Write(0x00001000, &u8TestVariable, 2U);
+    Comm_SendEventReport(&u8TestVariable, 2U);
+    Storage_StoreEventReport(&u8TestVariable, 2U);
+    printf("main: end\n\n");
 
-	return 0;
+    return 0;
 }
