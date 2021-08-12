@@ -29,10 +29,12 @@
 
 static const float64_t m_f64TimeIncrement = 20.0;
 
-void MainTest_OutputCounters(void);
-void MainTest_OutputStandbyModes(void);
-void MainTest_TC_01(void);
-void MainTest_TC_02(void);
+static void MainTest_OutputCounters(void);
+static void MainTest_OutputStandbyModes(void);
+static void MainTest_OutputEnabledReporting(void);
+static void MainTest_TC_01(void);
+static void MainTest_TC_02(void);
+static void MainTest_TC_03(void);
 
 
 int main(void) {
@@ -49,11 +51,12 @@ int main(void) {
 
     MainTest_TC_01();
     MainTest_TC_02();
+    MainTest_TC_03();
 
     return 0;
 }
 
-void MainTest_TC_01(void)
+static void MainTest_TC_01(void)
 {
     uint8_t u8TestVariable = 0U;
 
@@ -77,7 +80,7 @@ void MainTest_TC_01(void)
     return;
 }
 
-void MainTest_TC_02(void)
+static void MainTest_TC_02(void)
 {
     uint8_t u8TestVariable = 0U;
 
@@ -119,14 +122,60 @@ void MainTest_TC_02(void)
     return;
 }
 
-void MainTest_OutputCounters(void)
+static void MainTest_TC_03(void)
+{
+    uint8_t u8TestVariable = 0U;
+
+    printf("TC_03: start\n");
+    MainTest_OutputCounters();
+    MainTest_OutputStandbyModes();
+    MainTest_OutputEnabledReporting();
+
+    Timing_SetTime(Timing_GetTime() + m_f64TimeIncrement);
+    NvmMem_Write(0x00000000, &u8TestVariable, 2U);
+    MainTest_OutputCounters();
+    MainTest_OutputStandbyModes();
+    MainTest_OutputEnabledReporting();
+
+    EventHandler_SetEnabledReporting(E_EVENTHANDLER_TYPE_ADDRESSRANGE, E_FALSE);
+    Timing_SetTime(Timing_GetTime() + m_f64TimeIncrement);
+    NvmMem_Write(0x00000000, &u8TestVariable, 2U);
+    MainTest_OutputCounters();
+    MainTest_OutputStandbyModes();
+    MainTest_OutputEnabledReporting();
+
+    Timing_SetTime(Timing_GetTime() + m_f64TimeIncrement);
+    NvmMem_Write(0x00000000, &u8TestVariable, 2U);
+    MainTest_OutputCounters();
+    MainTest_OutputStandbyModes();
+    MainTest_OutputEnabledReporting();
+
+    EventHandler_SetEnabledReporting(E_EVENTHANDLER_TYPE_ADDRESSRANGE, E_TRUE);
+    Timing_SetTime(Timing_GetTime() + m_f64TimeIncrement);
+    NvmMem_Write(0x00000000, &u8TestVariable, 2U);
+    MainTest_OutputCounters();
+    MainTest_OutputStandbyModes();
+    MainTest_OutputEnabledReporting();
+
+    printf("TC_03: end\n\n");
+
+    return;
+}
+
+static void MainTest_OutputCounters(void)
 {
     printf("Counter address = %d, counter NULL = %d, counter size = %d\n", EventHandler_GetEventsCounter(E_EVENTHANDLER_SEVERITY_NORMAL, E_EVENTHANDLER_TYPE_ADDRESSRANGE), EventHandler_GetEventsCounter(E_EVENTHANDLER_SEVERITY_MEDIUM, E_EVENTHANDLER_TYPE_NULLARGUMENT), EventHandler_GetEventsCounter(E_EVENTHANDLER_SEVERITY_LOW, E_EVENTHANDLER_TYPE_MINDATALENGTH));
     return;
 }
 
-void MainTest_OutputStandbyModes(void)
+static void MainTest_OutputStandbyModes(void)
 {
-    printf("%d, %d, %d, %d, %d\n", EventHandler_GetStandbyMode(E_EVENTHANDLER_TYPE_NULLARGUMENT), EventHandler_GetStandbyMode(E_EVENTHANDLER_TYPE_MINDATALENGTH), EventHandler_GetStandbyMode(E_EVENTHANDLER_TYPE_ADDRESSRANGE), EventHandler_GetStandbyMode(E_EVENTHANDLER_TYPE_DIVISIONBYZERO), EventHandler_GetStandbyMode(E_EVENTHANDLER_TYPE_UNUPDATEDCONSTANTS));
+    printf("Standby %d, %d, %d, %d, %d\n", EventHandler_GetStandbyMode(E_EVENTHANDLER_TYPE_NULLARGUMENT), EventHandler_GetStandbyMode(E_EVENTHANDLER_TYPE_MINDATALENGTH), EventHandler_GetStandbyMode(E_EVENTHANDLER_TYPE_ADDRESSRANGE), EventHandler_GetStandbyMode(E_EVENTHANDLER_TYPE_DIVISIONBYZERO), EventHandler_GetStandbyMode(E_EVENTHANDLER_TYPE_UNUPDATEDCONSTANTS));
+    return;
+}
+
+static void MainTest_OutputEnabledReporting(void)
+{
+    printf("Enabled Reporting %d, %d, %d, %d, %d\n", EventHandler_GetEnabledReporting(E_EVENTHANDLER_TYPE_NULLARGUMENT), EventHandler_GetEnabledReporting(E_EVENTHANDLER_TYPE_MINDATALENGTH), EventHandler_GetEnabledReporting(E_EVENTHANDLER_TYPE_ADDRESSRANGE), EventHandler_GetEnabledReporting(E_EVENTHANDLER_TYPE_DIVISIONBYZERO), EventHandler_GetEnabledReporting(E_EVENTHANDLER_TYPE_UNUPDATEDCONSTANTS));
     return;
 }
