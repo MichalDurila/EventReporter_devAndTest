@@ -58,7 +58,7 @@ static void MainTest_TC_01(void)
     MainTest_OutputStatistics();
 
     Timing_SetTime(Timing_GetTime() + m_f64TimeIncrement);
-    NvmMem_Write(0x00000000, au8TestArray, 2U);
+    NvmMem_Write(0x00000FFF, au8TestArray, 2U);
     MainTest_OutputStatistics();
 
     Timing_SetTime(Timing_GetTime() + m_f64TimeIncrement);
