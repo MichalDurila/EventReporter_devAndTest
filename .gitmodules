@@ -1,4 +1,4 @@
 [submodule "src"]
 	path = src
 	url = https://github.com/MichalDurila/EventReporter_core.git
-	branch = feature/reportingFunction
+	branch = master
